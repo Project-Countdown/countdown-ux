@@ -2,7 +2,7 @@
     <v-container class="welcome" fluid>
         <v-row align="center"
             justify="center">
-              <h1>Welcome to Microsoft, you have <u>{{countDownDate ? countDownDate : -1}}</u> days until your start date</h1>
+              <h1>Welcome to Microsoft, you have <u>{{countDownDate}}</u> days until your start date</h1>
         </v-row>
     </v-container>
 </template>
@@ -11,7 +11,7 @@
 export default {
   name: 'Countdown',
   props: ['countDownDate'],
-   created() {
+  created() {
   },
   data() {
     return {
@@ -19,7 +19,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

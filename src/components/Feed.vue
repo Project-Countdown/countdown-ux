@@ -2,7 +2,6 @@
   <div class="question-feed">
     <v-card
       elevation="16"
-      max-width="80%"
       class="mx-auto"
     >
     <v-card-title>
@@ -17,8 +16,8 @@
           <v-btn value="Trending">
             <v-icon>mdi-trending-up</v-icon>
           </v-btn>
-          <v-btn value="Hot">
-            <v-icon>mdi-fire</v-icon>
+          <v-btn value="Top">
+            <v-icon>mdi-arrow-up-bold-box-outline</v-icon>
           </v-btn>
           <v-btn value="New">
             <v-icon>mdi-decagram-outline</v-icon>
