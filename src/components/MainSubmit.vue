@@ -16,11 +16,11 @@
               item-value="API"
               label="Ask a question"
               placeholder="What can I expect on my first day?"
-              
               solo
               @update:search-input="handleChange"
+              @input="emitQuestionInput"
             >
-            <template slot="no-data">
+            <template slot="no-data" class="mx-2">
               <v-btn
                 color="primary"
                 block
@@ -59,6 +59,9 @@ export default {
       else {
         this.showAskButton = false;
       }
+    },
+    emitQuestionInput(question) {
+      this.$emit('questionInputEvent', question);
     }
   },
   watch: {

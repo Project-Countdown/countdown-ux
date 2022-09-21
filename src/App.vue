@@ -18,8 +18,8 @@
           class="mx-auto"
         >
           <Countdown :countDownDate="countDownDate"/>
-          <MainSubmit/>
-          <Feed/>
+          <MainSubmit @questionInputEvent="(question) => questionInput = question"/>
+          <Feed :questionInput="questionInput"/>
         </v-card>
       </v-container>
     </v-main>
@@ -44,6 +44,7 @@ export default {
     }
   },
   data: () => ({
+    questionInput: null
   }),
 };
 </script>

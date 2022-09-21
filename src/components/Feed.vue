@@ -101,19 +101,18 @@
 export default {
     name: 'Feed',
     props: {
+        questionInput: String
     },
     computed: {
       items () {
         return Array.from({ length: this.length }, (k, v) => v + 1);
       },
-      length () {
-        return Math.floor(Math.random() * 20);
-      },
     },
     data() {
     return {
         feedType: "Trending",
-        isLoading: false
+        isLoading: false,
+        length: 20
     };
   },
   methods: {
@@ -121,8 +120,14 @@ export default {
             this.isLoading = !this.isLoading;
         setTimeout(()=> {
             this.isLoading = !this.isLoading;
+            this.length = Math.floor(Math.random() * 30) + 1;
         }, 200)
 
+    }
+  },
+  watch: {
+    questionInput() {
+        this.loadContent();
     }
   }
 }
