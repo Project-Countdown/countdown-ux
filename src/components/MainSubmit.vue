@@ -8,7 +8,7 @@
               :items="items"
               :loading="isLoading"
               :search-input.sync="search"
-              hide-no-data
+              :hide-no-data="search == null"
               hide-details
               clearable
               hide-selected
@@ -16,9 +16,23 @@
               item-value="API"
               label="Ask a question"
               placeholder="What can I expect on my first day?"
-              prepend-icon="mdi-chat-question"
+              
               solo
-            ></v-autocomplete>
+              @update:search-input="handleChange"
+            >
+            <template slot="no-data">
+              <v-btn
+                color="primary"
+                block
+                outlined
+                rounded
+                elevation="0">
+                Ask
+                <v-icon>mdi-chat-question</v-icon>
+              </v-btn>
+            </template>
+            </v-autocomplete>
+            
         </v-row>
     </v-container>
 </template>
@@ -31,17 +45,50 @@ export default {
   data () {
     return {
       searchInput: null,
+      search: null,
       isLoading: false,
-      items: [
-        'What do I wear?',
-        'Can I bike to work?',
-        'How much is my signing bonus taxed',
-        'What is life',
-        'Are we there yet?'
-      ]
+      items: [],
+      showAskButton: false,
+    }
+  },
+  methods: {
+    handleChange(searchWord) {
+      if (this.items.filter(value => value.startsWith(searchWord)).length === 0) {
+        this.showAskButton = true;
+      }
+      else {
+        this.showAskButton = false;
+      }
     }
   },
   watch: {
+    search () {
+        // Items have already been loaded
+        if (this.items.length > 0) return
+
+        // Items have already been requested
+        if (this.isLoading) return
+
+        this.isLoading = true
+
+        //API Request here
+        setTimeout(() => {
+          this.items = [
+            "What can I expect on my first day?",
+            'Where are the bathrooms?',
+            'What do I wear?',
+            'Can I bike to work?',
+            'How much is my signing bonus taxed?',
+            'What is life',
+            'Are we there yet?',
+            'How much is the average cost of lunch in Reston?',
+            'How much is the average cost of lunch in Redmond?',
+          ]
+          this.isLoading = false;
+        }, 100);
+
+       
+      },
     },
 }
 </script>
