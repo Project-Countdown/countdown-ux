@@ -53,4 +53,4 @@ jobs:
           app-name: 'ProjectCountdown-WebApp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_176118EE323D4B728D949FFB2302EF22 }}
-          package: .
+          package: ./dist
