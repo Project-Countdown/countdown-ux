@@ -13,15 +13,39 @@
           rounded
           @change="loadContent"
         >
-          <v-btn value="Trending">
-            <v-icon>mdi-trending-up</v-icon>
-          </v-btn>
-          <v-btn value="Top">
-            <v-icon>mdi-arrow-up-bold-box-outline</v-icon>
-          </v-btn>
-          <v-btn value="New">
-            <v-icon>mdi-decagram-outline</v-icon>
-          </v-btn>
+            <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                    v-bind="attrs"
+                    v-on="on"
+                    value="Trending">
+                    <v-icon>mdi-trending-up</v-icon>
+                    </v-btn>
+                </template>
+                <span>Trending</span>
+            </v-tooltip>
+            <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                    v-bind="attrs"
+                    v-on="on"
+                    value="Top">
+                    <v-icon>mdi-arrow-up-bold-box-outline</v-icon>
+                    </v-btn>
+                </template>
+                <span>Top</span>
+            </v-tooltip>
+            <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                    v-bind="attrs"
+                    v-on="on"
+                    value="New">
+                    <v-icon>mdi-decagram-outline</v-icon>
+                    </v-btn>
+                </template>
+                <span>New</span>
+            </v-tooltip>
         </v-btn-toggle>
 
     </v-card-title>
