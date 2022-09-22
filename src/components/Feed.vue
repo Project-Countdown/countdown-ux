@@ -64,28 +64,32 @@
         item-height="75"
       >
         <template v-slot:default="{ item }">
-          <v-list-item :key="item">
+          <v-list-item :key="item.fullName">
             <v-list-item-action>
-              <v-btn
-                fab
-                small
-                depressed
-                color="primary"
-              >
-                <v-icon>mdi-account</v-icon>
-              </v-btn>
+                <v-tooltip left>
+                     <template v-slot:activator="{ on }">
+                        <v-btn
+                                fab
+                                small
+                                depressed
+                                color="primary"
+                                v-on="on"
+                            >
+                            <v-icon>mdi-account</v-icon>
+                         </v-btn>
+                    </template>
+                <span>{{ item.fullName }}</span>
+                </v-tooltip>
             </v-list-item-action>
 
             <v-list-item-content>
               <v-list-item-title>
-                Question <strong>ID {{ item }}</strong>
+               {{ item.question }}
               </v-list-item-title>
             </v-list-item-content>
 
             <v-list-item-action>
-              <v-icon small>
-                mdi-open-in-new
-              </v-icon>
+                <QuestionDialog :question="item.question"/>
             </v-list-item-action>
           </v-list-item>
 
@@ -98,21 +102,32 @@
 </template>
 
 <script>
+import { faker } from "@faker-js/faker";
+import QuestionDialog from "./QuestionDialog.vue";
+
 export default {
     name: 'Feed',
+    components: {
+        QuestionDialog
+    },
     props: {
         questionInput: String
     },
     computed: {
       items () {
-        return Array.from({ length: this.length }, (k, v) => v + 1);
+        return Array.from({ length: this.length }, () => { 
+            return { 
+                fullName: faker.name.fullName(),
+                question: faker.hacker.phrase()
+            }});
       },
     },
     data() {
     return {
         feedType: "Trending",
         isLoading: false,
-        length: 20
+        length: Math.floor(Math.random() * 30) + 1,
+        faker: faker,
     };
   },
   methods: {
@@ -121,7 +136,7 @@ export default {
         setTimeout(()=> {
             this.isLoading = !this.isLoading;
             this.length = Math.floor(Math.random() * 30) + 1;
-        }, 200)
+        }, Math.floor(Math.random() * 600) + 100)
 
     }
   },

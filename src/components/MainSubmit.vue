@@ -86,6 +86,8 @@ export default {
             'Are we there yet?',
             'How much is the average cost of lunch in Reston?',
             'How much is the average cost of lunch in Redmond?',
+            'What are the benefits?',
+            'Are there microwaves in Reston?',
           ]
           this.isLoading = false;
         }, 100);
