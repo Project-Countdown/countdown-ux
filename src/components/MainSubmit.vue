@@ -26,7 +26,8 @@
                 block
                 outlined
                 rounded
-                elevation="0">
+                elevation="0"
+                @click="askQuestion()">
                 Ask
                 <v-icon>mdi-chat-question</v-icon>
               </v-btn>
@@ -62,6 +63,27 @@ export default {
     },
     emitQuestionInput(question) {
       this.$emit('questionInputEvent', question);
+    },
+    
+    async askQuestion (){
+      const year = new Date().getFullYear();
+      const requestOptions = {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          PartitionKey: year.toString(),
+          RowKey: "",
+          RequestType: "add",
+          Text: this.search
+        })
+      };
+
+      const response = await fetch(
+        "https://prod-41.eastus.logic.azure.com:443/workflows/42ee109f7da94a91bbc3c74388040e34/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=tUGgVy-E0N95ovXLZQvgbnsMC4OmPPQsJv3sJTt3ulI",
+        requestOptions);
+      const question = await response.json();
+      console.log(question);
+      return question;
     }
   },
   watch: {
