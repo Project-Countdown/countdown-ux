@@ -138,6 +138,23 @@ export default {
             this.length = Math.floor(Math.random() * 30) + 1;
         }, Math.floor(Math.random() * 600) + 100)
 
+    },
+    async getQuestions(){
+      const requestOptions = {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          PartitionKey: "",
+          RowKey: "",
+          RequestType: "all",
+          Text: ""
+        })
+      };
+      const response = await fetch(
+        "https://prod-41.eastus.logic.azure.com:443/workflows/42ee109f7da94a91bbc3c74388040e34/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=tUGgVy-E0N95ovXLZQvgbnsMC4OmPPQsJv3sJTt3ulI",
+        requestOptions);
+      const questions = await response.json();
+      return questions['value'];
     }
   },
   watch: {

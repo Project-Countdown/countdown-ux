@@ -26,10 +26,12 @@
                 block
                 outlined
                 rounded
+                :disabled="buttonDisabled"
+                :loading="buttonLoading"
                 elevation="0"
                 @click="askQuestion()">
-                Ask
-                <v-icon>mdi-chat-question</v-icon>
+                {{ askText }}
+                <v-icon>{{ askIcon }}</v-icon>
               </v-btn>
             </template>
             </v-autocomplete>
@@ -50,10 +52,26 @@ export default {
       isLoading: false,
       items: [],
       showAskButton: false,
+      askText: "Ask",
+      askIcon: "mdi-chat-question",
+      buttonLoading: false,
+      buttonDisabled: false,
     }
   },
   methods: {
     handleChange(searchWord) {
+      if (this.buttonDisabled){
+        this.buttonDisabled = false;
+      }
+      if (this.buttonLoading){
+        this.buttonLoading = false;
+      }
+      if(this.askText !== "Ask"){
+         this.askText = "Ask";
+      }
+      if (this.askIcon !== "mdi-chat-question"){
+        this.askIcon = "mdi-chat-question";
+      }
       if (this.items.filter(value => value.startsWith(searchWord)).length === 0) {
         this.showAskButton = true;
       }
@@ -64,8 +82,10 @@ export default {
     emitQuestionInput(question) {
       this.$emit('questionInputEvent', question);
     },
-    
+
     async askQuestion (){
+      this.buttonLoading = true;
+      this.buttonDisabled = true;
       const year = new Date().getFullYear();
       const requestOptions = {
         method: "POST",
@@ -77,12 +97,17 @@ export default {
           Text: this.search
         })
       };
-
+      //comment-check-outline
       const response = await fetch(
         "https://prod-41.eastus.logic.azure.com:443/workflows/42ee109f7da94a91bbc3c74388040e34/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=tUGgVy-E0N95ovXLZQvgbnsMC4OmPPQsJv3sJTt3ulI",
         requestOptions);
       const question = await response.json();
-      console.log(question);
+      if (response['status'] === 200){
+        console.log("Made it");
+        this.buttonLoading = false;
+        this.askText = "Question Submitted";
+        this.askIcon = "mdi-comment-check-outline";
+      }
       return question;
     }
   },
