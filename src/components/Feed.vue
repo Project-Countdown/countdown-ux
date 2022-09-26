@@ -84,12 +84,12 @@
 
             <v-list-item-content>
               <v-list-item-title>
-               {{ item.question }}
+               {{ item.Text }}
               </v-list-item-title>
             </v-list-item-content>
 
             <v-list-item-action>
-                <QuestionDialog :question="item.question"/>
+                <QuestionDialog :question="item.Text"/>
             </v-list-item-action>
           </v-list-item>
 
@@ -111,16 +111,17 @@ export default {
         QuestionDialog
     },
     props: {
-        questionInput: String
+        questionInput: String,
+        refreshFeedProp: Boolean,
     },
     computed: {
-      items () {
+      /*items () {
         return Array.from({ length: this.length }, () => { 
             return { 
                 fullName: faker.name.fullName(),
                 question: faker.hacker.phrase()
             }});
-      },
+      },*/
     },
     data() {
     return {
@@ -128,7 +129,12 @@ export default {
         isLoading: false,
         length: Math.floor(Math.random() * 30) + 1,
         faker: faker,
+        items: [],
     };
+  },
+  created () {
+    this.getQuestions();
+
   },
   methods: {
     loadContent() {
@@ -154,12 +160,29 @@ export default {
         "https://prod-41.eastus.logic.azure.com:443/workflows/42ee109f7da94a91bbc3c74388040e34/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=tUGgVy-E0N95ovXLZQvgbnsMC4OmPPQsJv3sJTt3ulI",
         requestOptions);
       const questions = await response.json();
-      return questions['value'];
-    }
+      const list = questions['value'];
+      list.sort(function(a,b){
+        if (a.Timestamp > b.Timestamp) return -1;
+        if (a.Timestamp < b.Timestamp) return 1;
+        return 0;
+      })
+      console.log(list);
+      this.items = list;
+      this.emitRefreshed();
+    },
+    emitRefreshed(){
+      this.$emit('refreshedFeed');
+    },
   },
   watch: {
     questionInput() {
         this.loadContent();
+    },
+    async refreshFeedProp(newValue){
+      console.log("f");
+      if (newValue) {
+        this.getQuestions();
+      }
     }
   }
 }

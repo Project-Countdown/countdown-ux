@@ -18,8 +18,10 @@
           class="mx-auto"
         >
           <Countdown :countDownDate="countDownDate"/>
-          <MainSubmit @questionInputEvent="(question) => questionInput = question"/>
-          <Feed :questionInput="questionInput"/>
+          <MainSubmit @questionInputEvent="(question) => questionInput = question"
+            @refreshFeedEvent="refreshFeed"/>
+          <Feed @refreshedFeed="refreshedFeed" :questionInput="questionInput"
+          :refreshFeedProp="refreshFeedProp"/>
         </v-card>
       </v-container>
     </v-main>
@@ -44,8 +46,19 @@ export default {
     }
   },
   data: () => ({
-    questionInput: null
+    questionInput: null,
+    refreshFeedProp: false,
   }),
+  methods: {
+    refreshFeed : function(){
+      console.log("emit");
+      this.refreshFeedProp = true;
+    },
+    refreshedFeed : function () {
+      console.log("set back");
+      this.refreshFeedProp = false;
+    }
+  },
 };
 </script>
 

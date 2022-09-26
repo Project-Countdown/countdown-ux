@@ -31,7 +31,7 @@
                 elevation="0"
                 @click="askQuestion()">
                 {{ askText }}
-                <v-icon>{{ askIcon }}</v-icon>
+                <v-icon>{{ askIcon }}</v-icon> {{ askEmail }}
               </v-btn>
             </template>
             </v-autocomplete>
@@ -54,6 +54,7 @@ export default {
       showAskButton: false,
       askText: "Ask",
       askIcon: "mdi-chat-question",
+      askEmail: "",
       buttonLoading: false,
       buttonDisabled: false,
     }
@@ -68,6 +69,7 @@ export default {
       }
       if(this.askText !== "Ask"){
          this.askText = "Ask";
+         this.askEmail = "";
       }
       if (this.askIcon !== "mdi-chat-question"){
         this.askIcon = "mdi-chat-question";
@@ -82,7 +84,9 @@ export default {
     emitQuestionInput(question) {
       this.$emit('questionInputEvent', question);
     },
-
+    emitRefreshFeed(){
+      this.$emit('refreshFeedEvent');
+    },
     async askQuestion (){
       this.buttonLoading = true;
       this.buttonDisabled = true;
@@ -104,9 +108,12 @@ export default {
       const question = await response.json();
       if (response['status'] === 200){
         console.log("Made it");
+        console.log(question);
         this.buttonLoading = false;
         this.askText = "Question Submitted";
         this.askIcon = "mdi-comment-check-outline";
+        this.askEmail = " to " + question["email"];
+        this.emitRefreshFeed();
       }
       return question;
     }
